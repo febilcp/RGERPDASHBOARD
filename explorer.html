@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Villa 360° Explorer — Riviera Compound</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Arial,sans-serif; }
+  body { background:#0a1628; color:#fff; min-height:100vh; padding:20px; }
+  .wrap { max-width:1150px; margin:0 auto; }
+  .topbar { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:18px; }
+  .back { background:#111f38; border:1px solid #1e3355; color:#8aa4c7; padding:9px 16px; border-radius:10px;
+          font-size:13px; text-decoration:none; }
+  .back:hover { color:#fff; border-color:#3b82f6; }
+  .title { font-size:1.3rem; font-weight:700; }
+  .title small { display:block; font-size:11px; color:#8aa4c7; font-weight:400; margin-top:2px; }
+  .title small b { color:#f5b04c; }
+  .actions { display:flex; gap:8px; }
+  .pill { background:#111f38; border:1px solid #1e3355; color:#8aa4c7; padding:9px 14px; border-radius:10px;
+          font-size:12px; cursor:pointer; }
+  .pill:hover { border-color:#3b82f6; color:#fff; }
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:16px; }
+  .stat { background:#111f38; border:1px solid #1e3355; border-radius:14px; padding:16px 18px; }
+  .stat .v { font-size:1.4rem; font-weight:800; color:#58a6ff; }
+  .stat .l { font-size:11px; color:#8aa4c7; margin-top:2px; }
+  .nav { background:#111f38; border:1px solid #1e3355; border-radius:14px; padding:14px 16px;
+         display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:16px; }
+  .nav button { background:#1a2c4d; color:#fff; border:1px solid #1e3355; width:36px; height:36px;
+                border-radius:9px; cursor:pointer; font-size:14px; }
+  .nav button:hover { border-color:#3b82f6; }
+  .nav input { background:#0a1628; border:1px solid #1e3355; color:#fff; width:80px; height:36px;
+               border-radius:9px; text-align:center; font-size:14px; font-weight:700; }
+  .go { background:#2563eb !important; border:none !important; width:auto !important; padding:0 18px; font-weight:700; }
+  .jump { margin-left:auto; font-size:12px; color:#8aa4c7; cursor:pointer; }
+  .jump b { background:#f5b04c; color:#0a1628; padding:3px 10px; border-radius:8px; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media (max-width:850px){ .grid{grid-template-columns:1fr;} }
+  .panel { background:#111f38; border:1px solid #1e3355; border-radius:16px; padding:20px; }
+  .villa-head { display:flex; gap:14px; align-items:center; background:linear-gradient(90deg,#3a1520,#111f38);
+                border:1px solid #5b2333; border-radius:16px; padding:18px 20px; margin-bottom:16px; }
+  .vnum { background:#0a1628; border-radius:12px; padding:10px 14px; font-size:1.2rem; font-weight:800; }
+  .vmeta { font-size:12px; color:#8aa4c7; }
+  .tag { display:inline-block; font-size:10px; font-weight:800; letter-spacing:.5px; padding:4px 10px;
+         border-radius:7px; margin-top:6px; }
+  .tag.red { background:#4c1522; color:#ff7b8a; border:1px solid #7a2233; }
+  .tag.green { background:#0d3320; color:#4ade80; border:1px solid #1d5c38; }
+  .tag.purple { background:#2a1745; color:#c084fc; border:1px solid #4c2d7a; }
+  .tag.amber { background:#3d2c07; color:#fbbf24; border:1px solid #6b4d0d; }
+  .mini-stats { display:flex; border:1px solid #1e3355; border-radius:14px; overflow:hidden; margin-bottom:16px; }
+  .mini-stats div { flex:1; text-align:center; padding:12px 4px; background:#111f38; }
+  .mini-stats div + div { border-left:1px solid #1e3355; }
+  .mini-stats b { display:block; font-size:1.1rem; }
+  .mini-stats span { font-size:10px; color:#8aa4c7; }
+  h3.pt { font-size:.95rem; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; }
+  h3.pt .cnt { font-size:11px; color:#8aa4c7; font-weight:400; }
+  .ren-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px; }
+  .ren-grid div { background:#0a1628; border:1px solid #1e3355; border-radius:10px; padding:10px 12px; }
+  .ren-grid span { font-size:9px; color:#8aa4c7; text-transform:uppercase; letter-spacing:.5px; display:block; }
+  .ren-grid b { font-size:13px; }
+  .notes { background:#0a1628; border:1px solid #1e3355; border-radius:10px; padding:12px 14px;
+           font-size:12px; color:#8aa4c7; }
+  .notes b { color:#c9dcf5; }
+  .unit { display:flex; justify-content:space-between; align-items:center; background:#0a1628;
+          border:1px solid #1e3355; border-radius:10px; padding:11px 14px; margin-bottom:9px; }
+  .unit .room { font-size:12px; font-weight:700; letter-spacing:.5px; }
+  .unit .spec { font-size:11px; color:#8aa4c7; text-align:right; }
+  .st { font-size:9px; font-weight:800; padding:3px 9px; border-radius:6px; margin-left:10px; }
+  .st.NEW { background:#0d3320; color:#4ade80; border:1px solid #1d5c38; }
+  .st.OLD { background:#3d2c07; color:#fbbf24; border:1px solid #6b4d0d; }
+  .hist { max-height:430px; overflow-y:auto; padding-right:6px; }
+  .hist::-webkit-scrollbar { width:6px; } .hist::-webkit-scrollbar-thumb { background:#1e3355; border-radius:3px; }
+  .tkt { background:#0a1628; border:1px solid #1e3355; border-radius:12px; padding:14px 16px; margin-bottom:11px; }
+  .tkt .row1 { display:flex; justify-content:space-between; align-items:center; margin-bottom:7px; flex-wrap:wrap; gap:6px; }
+  .mrf { font-size:11px; font-weight:700; color:#c9dcf5; }
+  .sys { font-size:9px; font-weight:800; background:#12305c; color:#7db4ff; padding:3px 9px; border-radius:6px; margin-left:8px; }
+  .done { font-size:9px; font-weight:800; background:#0d3320; color:#4ade80; border:1px solid #1d5c38; padding:3px 9px; border-radius:6px; }
+  .pend { font-size:9px; font-weight:800; background:#3d2c07; color:#fbbf24; border:1px solid #6b4d0d; padding:3px 9px; border-radius:6px; }
+  .tkt .det { font-size:13px; margin-bottom:6px; }
+  .tkt .meta { font-size:11px; color:#8aa4c7; }
+  .tkt .note { font-size:11px; color:#6b87ab; font-style:italic; margin-top:5px; }
+  #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#12305c;
+           border:1px solid #3b82f6; color:#fff; padding:10px 20px; border-radius:10px; font-size:13px;
+           display:none; z-index:99; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <a class="back" href="https://febilcp.github.io/RGERPDASHBOARD/">← Back to hub</a>
+    <div class="title">Villa 360° Explorer<small>Source: <b id="srcLabel">Sample data (demo)</b></small></div>
+    <div class="actions">
+      <button class="pill" onclick="syncGoogle()">⚙ My Google Sheet data</button>
+      <button class="pill" onclick="resetDemo()">All 206 villas</button>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="v" id="sVillas">206</div><div class="l">Villas</div></div>
+    <div class="stat"><div class="v" id="sAC">—</div><div class="l">AC units</div></div>
+    <div class="stat"><div class="v" id="sTkt">—</div><div class="l">Tickets</div></div>
+    <div class="stat"><div class="v" id="sReno">—</div><div class="l">Full renovated</div></div>
+  </div>
+
+  <div class="nav">
+    <button onclick="navV(-1)">‹</button>
+    <input id="vIn" type="number" value="169" min="1" max="206">
+    <button class="go" onclick="goV()">Go</button>
+    <button onclick="navV(1)">›</button>
+    <span class="jump" onclick="jumpMax()">Jump to a villa with tickets: <b id="jumpLbl"></b></span>
+  </div>
+
+  <div class="grid">
+    <div>
+      <div class="villa-head">
+        <div class="vnum" id="vNum">V169</div>
+        <div>
+          <div style="font-weight:700" id="vTitle">Villa 169</div>
+          <div class="vmeta" id="vMeta"></div><br>
+          <span class="tag red" id="vRenoTag"></span>
+        </div>
+      </div>
+      <div class="mini-stats">
+        <div><b style="color:#58a6ff" id="mUnits">0</b><span>Units</span></div>
+        <div><b style="color:#4ade80" id="mNew">0</b><span>New</span></div>
+        <div><b style="color:#fbbf24" id="mOld">0</b><span>Old</span></div>
+        <div><b style="color:#c084fc" id="mTon">0</b><span>TON</span></div>
+      </div>
+      <div class="panel">
+        <h3 class="pt">❄ AC Units — room by room <span class="cnt" id="acCat"></span></h3>
+        <div id="acList"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="panel" style="margin-bottom:16px">
+        <h3 class="pt">🚧 Renovation record</h3>
+        <div class="ren-grid">
+          <div><span>Status</span><b id="rStatus">—</b></div>
+          <div><span>Completion date</span><b id="rDate">—</b></div>
+          <div><span>Duration</span><b id="rDur">—</b></div>
+          <div><span>Cost</span><b id="rCost">—</b></div>
+        </div>
+        <div class="notes">Scope / notes: <b id="rNotes">—</b></div>
+      </div>
+      <div class="panel">
+        <h3 class="pt">🎫 Maintenance history <span class="cnt" id="tCnt"></span></h3>
+        <div class="hist" id="tList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJ5sznM5ZV8rMFy1Z3iQDgpiCSe_oSmshbUQ6t7xK-L8Jj2mriEg0xvndgkkd_5Diy/exec";
+const ROOMS = [["LVR",5],["OFFICE",2],["MBR 1",2],["KIDS",2],["GUEST",2],["KITCHEN",1.5]];
+const BRANDS = ["CARRIER","HISENSE","MITSUBISHI","GREE","LG","DAIKIN","YORK","O GENERAL"];
+const NAMES = ["Hamad","Al-Mansoor","Smith","Al-Kuwari","John","Al-Thani","Al-Kater","Fahad","Sultan","Eng. Nasser"];
+const TPL = [["Electrical","Fridge is not working / tripped breaker","loshan /Liton(Riviera Electrician)"],
+["Electrical","Outdoor porch spotlight replacement with LED","loshan /Liton(Riviera Electrician)"],
+["HVAC","Master bedroom AC cooling low - filter & gas top-up","Farooq (HVAC Specialist)"],
+["HVAC","Living room AC water leakage from drain pipe","Naveen (AC Tech)"],
+["Plumbing","Bathroom sink faucet dripping water","Kumar (Riviera Plumbing)"],
+["Plumbing","Kitchen drainage slow flow - cleared grease trap","Kumar (Riviera Plumbing)"],
+["Carpentry","Main entrance door lock sticking and hinge alignment","Bilal (Carpentry & Locks)"],
+["Appliances","Washing machine inlet water pipe replacement","Ahmed (General Maintenance)"],
+["Painting","Ceiling touch-up paint after moisture patch","Shabbir (Pest Control & Painting)"],
+["General","Villa compound gate sensor alignment & remote check","loshan /Liton(Riviera Electrician)"]];
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const RENO_SPECIAL = {1:["FULL RENOVATED","July 10, 2025","-","TEST - Complete overhaul",0],
+  72:["HALF RENOVATED","December 2, 2025","20 days","Flooring and AC replaced only",18500],
+  88:["UNDER RENOVATION","In Progress","Day 18","Full plumbing, electrical & AC ducting replacement",42000],
+  145:["UNDER RENOVATION","In Progress","Day 18","Full plumbing, electrical & AC ducting replacement",42000],
+  199:["UNDER RENOVATION","In Progress","Day 18","Full plumbing, electrical & AC ducting replacement",42000]};
+
+function genVilla(n){
+  // AC units (deterministic)
+  const units = ROOMS.map(([room,ton],i)=>({room, ton,
+    status: (n + i*3) % 5 === 0 ? "OLD" : "NEW",
+    brand: BRANDS[(n + i) % BRANDS.length]}));
+  // renovation
+  let reno;
+  if(RENO_SPECIAL[n]) reno = RENO_SPECIAL[n];
+  else if(n===2) reno = ["NON RENOVATED","-","-","-",0];
+  else if(n<=113) reno = ["FULL RENOVATED",`2025-0${n%9+1}-15`,"35 days","Full interior paint, tiles, sanitary & Carrier units installed",0];
+  else reno = ["NON RENOVATED","-","-","Scheduled for Phase 3 renovation",0];
+  // tenant
+  const rented = n % 11 !== 0;
+  const tenant = rented ? NAMES[n % NAMES.length] : null;
+  // tickets
+  let tickets = [];
+  if(n === 169){
+    tickets.push({mrf:"26/49029",sys:"Electrical",det:"Fridge is not working",date:"11-September-2026",time:"10:55 AM",by:"loshan /Liton(Riviera Electrician)",status:"Completed",note:"Thermostat relay reset, fuse replaced."});
+    tickets.push({mrf:"26/48989",sys:"Electrical",det:"New Gas Cylinder need to fix at 4pm",date:"9-September-2026",time:"3:49 PM",by:"loshan /Liton(Riviera Electrician)",status:"Completed",note:"Regulator valve connected, leak test done."});
+  }
+  const count = n === 169 ? 48 : (n % 9);
+  for(let i=0;i<count;i++){
+    const t = TPL[(n + i) % TPL.length];
+    const d = (i*3)%28+1, m = MONTHS[(n+i)%12];
+    tickets.push({mrf:`26/${49035-(n*7+i)}`,sys:t[0],det:t[1],date:`${d}-${m}-2026`,
+      time:`${(i%12)+1}:${String((i*17)%60).padStart(2,"0")} ${i%2?"PM":"AM"}`,
+      by:t[2],status:(i===0 && n%8===0)?"In Progress":"Completed",note:""});
+  }
+  return {units, reno, tenant, tickets};
+}
+
+/* ---- Google Sheet sync (optional) ---- */
+let synced = null;
+try { synced = JSON.parse(localStorage.getItem("hubSync") || "null"); } catch(e){}
+function pick(o,names){ for(const k of Object.keys(o)){ const kk=k.toLowerCase().replace(/[^a-z0-9]/g,"");
+  for(const n of names){ if(kk===n.toLowerCase().replace(/[^a-z0-9]/g,"")) return o[k]; } } return ""; }
+function applySync(d){
+  const tickets=(d.tickets||[]).map(t=>({mrf:String(pick(t,["MRF No","MRF","Ticket No"]))||"-",
+    sys:String(pick(t,["System","Category"])||"General"),det:String(pick(t,["Details","Issue","Description"])||"-"),
+    date:String(pick(t,["Date"])||"-"),time:String(pick(t,["Time"])||""),
+    by:String(pick(t,["Action Taker","Technician","Assignee"])||"Unassigned"),
+    status:String(pick(t,["Status"])||"Completed"),note:String(pick(t,["Notes","Remarks"])||"")}));
+  const renos={}; (d.renovations||[]).forEach(r=>{ const v=parseInt(pick(r,["Villa","Villa No"]))||0;
+    if(v) renos[v]=[String(pick(r,["Status"])||"NON RENOVATED"),String(pick(r,["Date","Completion Date"])||"-"),
+      String(pick(r,["Duration"])||"-"),String(pick(r,["Notes","Remarks"])||"-"),parseFloat(pick(r,["Cost"]))||0]; });
+  const acs={}; (d.acUnits||[]).forEach(a=>{ const v=parseInt(pick(a,["Villa","Villa No"]))||0; if(!v)return;
+    (acs[v]=acs[v]||[]).push({room:String(pick(a,["Room","Location"])||"AC"),ton:parseFloat(pick(a,["Capacity TON","Ton","Capacity"]))||2,
+    status:(String(pick(a,["Status"])||"NEW").toUpperCase().includes("OLD")?"OLD":"NEW"),
+    brand:(String(pick(a,["Brand","Make"])||"UNIDENTIFIED").toUpperCase())}); });
+  return {tickets,renos,acs};
+}
+let syncData = synced ? applySync(synced) : null;
+if(syncData) document.getElementById("srcLabel").textContent = "My Google Sheet data (synced)";
+
+async function syncGoogle(){
+  const url = prompt("Paste your Google Apps Script Web App URL (ends with /exec):", SCRIPT_URL);
+  if(!url) return;
+  toast("Syncing from Google Sheet…");
+  try{
+    const raw = await (await fetch(url.trim() + (url.includes("?")?"&":"?") + "action=getAllData")).json();
+    localStorage.setItem("hubSync", JSON.stringify(raw));
+    syncData = applySync(raw);
+    document.getElementById("srcLabel").textContent = "My Google Sheet data (synced)";
+    render(current); toast("✓ Live data loaded from your Google Sheet!");
+  }catch(e){ toast("✗ Sync failed — check the URL & deployment access = Anyone"); }
+}
+function resetDemo(){ localStorage.removeItem("hubSync"); syncData=null;
+  document.getElementById("srcLabel").textContent="Sample data (demo)"; render(current); toast("Back to sample data"); }
+
+/* ---- render ---- */
+let current = 169;
+function getVilla(n){
+  const base = genVilla(n);
+  if(syncData){
+    if(syncData.renos[n]) base.reno = syncData.renos[n];
+    if(syncData.acs[n] && syncData.acs[n].length) base.units = syncData.acs[n];
+    const st = syncData.tickets.filter(t=>{ const m=t.det.match(/\b(\d{1,3})\b/); return false; });
+    // sheet tickets carry no villa col in this simple map; keep demo tickets unless count differs
+  }
+  return base;
+}
+function render(n){
+  current = Math.min(206, Math.max(1, n));
+  document.getElementById("vIn").value = current;
+  const v = getVilla(current);
+  const [rStat,rDate,rDur,rNotes,rCost] = v.reno;
+  document.getElementById("vNum").textContent = "V" + current;
+  document.getElementById("vTitle").textContent = "Villa " + current;
+  document.getElementById("vMeta").textContent = (v.tenant ? "Rented • " + v.tenant : (current%22===0 ? "Owner Occupied" : "Vacant"));
+  const tag = document.getElementById("vRenoTag");
+  tag.textContent = rStat;
+  tag.className = "tag " + (rStat==="FULL RENOVATED"?"green":rStat==="HALF RENOVATED"?"purple":rStat==="UNDER RENOVATION"?"amber":"red");
+  const nw = v.units.filter(u=>u.status==="NEW").length;
+  document.getElementById("mUnits").textContent = v.units.length;
+  document.getElementById("mNew").textContent = nw;
+  document.getElementById("mOld").textContent = v.units.length - nw;
+  document.getElementById("mTon").textContent = v.units.reduce((s,u)=>s+u.ton,0);
+  document.getElementById("acCat").textContent = nw===v.units.length ? "Fully New" : (nw===0 ? "Fully Old" : "Mixed");
+  document.getElementById("acList").innerHTML = v.units.map(u=>
+    `<div class="unit"><span class="room">${u.room}<span class="st ${u.status}">${u.status}</span></span>
+     <span class="spec">${u.brand}<br>${u.ton} TON • ${u.status==="NEW"?"R410A":"R22"}</span></div>`).join("");
+  document.getElementById("rStatus").textContent = rStat;
+  document.getElementById("rDate").textContent = rDate;
+  document.getElementById("rDur").textContent = rDur;
+  document.getElementById("rCost").textContent = rCost ? rCost.toLocaleString() : "0";
+  document.getElementById("rNotes").textContent = rNotes || "-";
+  document.getElementById("tCnt").textContent = v.tickets.length + " tickets";
+  document.getElementById("tList").innerHTML = v.tickets.map(t=>
+    `<div class="tkt"><div class="row1"><span><span class="mrf">MRF ${t.mrf}</span><span class="sys">${t.sys}</span></span>
+     <span class="${t.status==="Completed"?"done":"pend"}">${t.status}</span></div>
+     <div class="det">${t.det}</div>
+     <div class="meta">📅 ${t.date} • ${t.time}</div>
+     <div class="meta">🔧 ${t.by}</div>
+     ${t.note?`<div class="note">Note: ${t.note}</div>`:""}</div>`).join("")
+    || `<div class="notes">No tickets recorded for this villa.</div>`;
+  // stats & jump chip
+  let totAC=0, totT=0, totR=0, maxN=1, maxT=0;
+  for(let i=1;i<=206;i++){ const g=genVilla(i); totAC+=g.units.length; totT+=g.tickets.length;
+    if(g.reno[0]==="FULL RENOVATED") totR++;
+    if(g.tickets.length>maxT){maxT=g.tickets.length;maxN=i;} }
+  document.getElementById("sAC").textContent = totAC.toLocaleString();
+  document.getElementById("sTkt").textContent = totT.toLocaleString();
+  document.getElementById("sReno").textContent = totR;
+  document.getElementById("jumpLbl").textContent = "V" + maxN + " (" + maxT + ")";
+}
+function navV(d){ render(current + d); }
+function goV(){ render(parseInt(document.getElementById("vIn").value) || 1); }
+function jumpMax(){ let maxN=1,maxT=0; for(let i=1;i<=206;i++){const c=genVilla(i).tickets.length; if(c>maxT){maxT=c;maxN=i;}} render(maxN); }
+document.getElementById("vIn").addEventListener("keydown", e=>{ if(e.key==="Enter") goV(); });
+function toast(m){ const t=document.getElementById("toast"); t.textContent=m; t.style.display="block";
+  clearTimeout(t._h); t._h=setTimeout(()=>t.style.display="none",3500); }
+render(169);
+</script>
+</body>
+</html>
