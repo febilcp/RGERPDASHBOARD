@@ -1,54 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Villa Compound Management Hub</title>
-<style>
-  * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Arial,sans-serif; }
-  body { min-height:100vh; background:linear-gradient(135deg,#1e3a8a,#2563eb,#3b82f6);
-         display:flex; flex-direction:column; align-items:center; padding:40px 20px; color:#fff; }
-  h1 { font-size:2.2rem; margin-bottom:8px; }
-  p.sub { opacity:.85; margin-bottom:40px; }
-  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-          gap:24px; max-width:1000px; width:100%; }
-  .card { background:#fff; color:#1f2937; border-radius:16px; padding:32px 24px;
-          text-decoration:none; box-shadow:0 10px 30px rgba(0,0,0,.25);
-          transition:transform .2s, box-shadow .2s; }
-  .card:hover { transform:translateY(-6px); box-shadow:0 16px 40px rgba(0,0,0,.35); }
-  .card .icon { font-size:2.5rem; margin-bottom:16px; }
-  .card h2 { font-size:1.3rem; margin-bottom:8px; }
-  .card p { font-size:.9rem; color:#6b7280; }
-  .badge { display:inline-block; margin-top:16px; font-size:.75rem; padding:4px 10px;
-           border-radius:20px; background:#dbeafe; color:#1d4ed8; }
-</style>
-</head>
-<body>
-  <h1>🏘️ Villa Compound Management Hub</h1>
-  <p class="sub">All maintenance tools in one place</p>
-  <div class="grid">
-
-    <a class="card" href="https://febilcp.github.io/ticketrack/" target="_blank" rel="noopener">
-      <div class="icon">🎫</div>
-      <h2>Maintenance Dashboard</h2>
-      <p>Search, track and export villa maintenance tickets & records.</p>
-      <span class="badge">GitHub Pages</span>
-    </a>
-
-    <a class="card" href="https://script.google.com/macros/s/AKfycbxJ5sznM5ZV8rMFy1Z3iQDgpjCSe_oSmshbUQ6t7K-L8Jj2mrjEg0xvndgkkd_5Diy/exec" target="_blank" rel="noopener">
-      <div class="icon">❄️</div>
-      <h2>AC Tracking System</h2>
-      <p>Real-time dashboard for villa air conditioning management.</p>
-      <span class="badge">Google Apps Script</span>
-    </a>
-
-    <a class="card" href="https://febilcp.github.io/rgvillarenovationstatus2026/" target="_blank" rel="noopener">
-      <div class="icon">🏠</div>
-      <h2>Renovation Tracker</h2>
-      <p>Renovation status, AC replacement and maintenance records.</p>
-      <span class="badge">GitHub Pages</span>
-    </a>
-
-  </div>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Riviera Villa Compound Maintenance | Unified Operations Portal</title>
+    <meta name="description" content="Unified 3-in-1 Villa Compound Maintenance Dashboard, AC Tracking System, and Renovation Status Tracker" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  </head>
+  <body class="bg-slate-100 text-slate-800 antialiased font-['Plus_Jakarta_Sans',sans-serif] selection:bg-blue-500 selection:text-white">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
